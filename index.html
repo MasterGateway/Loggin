@@ -1,118 +1,421 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Login Profesional</title>
-<style>
-body {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #4a90e2, #9013fe);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-.login-container {
-  background: #fff;
-  padding: 2rem;
-  border-radius: 15px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  max-width: 350px;
-  width: 100%;
-  animation: fadeIn 0.6s ease;
-}
-.login-container h2 {
-  text-align: center;
-  margin-bottom: 1.5rem;
-  color: #333;
-}
-.form-group {
-  margin-bottom: 1.2rem;
-}
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #555;
-}
-input[type="text"],
-input[type="password"] {
-  width: 100%;
-  padding: 0.8rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
-  outline: none;
-  transition: border 0.3s ease;
-}
-input[type="text"]:focus,
-input[type="password"]:focus {
-  border-color: #4a90e2;
-}
-button {
-  width: 100%;
-  padding: 0.8rem;
-  background: linear-gradient(90deg, #4a90e2, #9013fe);
-  color: #fff;
-  font-size: 1rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
-}
-button:hover {
-  background: linear-gradient(90deg, #3a78c2, #7510cc);
-  transform: translateY(-2px);
-}
-.message {
-  text-align: center;
-  margin-top: 1rem;
-  font-size: 0.9rem;
-  color: red;
-}
-@keyframes fadeIn {
-  from {opacity: 0; transform: translateY(-20px);}
-  to {opacity: 1; transform: translateY(0);}
-}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login Pro — Remasterizado</title>
+  <meta name="description" content="Login profesional, dinámico y accesible con animaciones, validaciones y pequeñas simulaciones de autenticación." />
+  <style>
+    /* -----------------------------------------------
+       Estilos: paleta profesional, bordes redondeados,
+       sombras suaves y microinteracciones
+       ----------------------------------------------- */
+    :root{
+      --bg-1: #0f1724; /* fondo oscuro */
+      --glass: rgba(255,255,255,0.04);
+      --card: linear-gradient(135deg,#071330 0%, #0b2540 100%);
+      --accent: #7c3aed; /* morado */
+      --accent-2: #06b6d4; /* cian */
+      --muted: #9fb0c8;
+      --text: #e6eef8;
+      --success: #16a34a;
+      --danger: #ef4444;
+      --radius: 14px;
+      --glass-2: rgba(255,255,255,0.02);
+    }
+
+    /* Reset ligero */
+    *{box-sizing:border-box}
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(124,58,237,0.12), transparent),
+                  radial-gradient(1000px 500px at 90% 90%, rgba(6,182,212,0.08), transparent),
+                  var(--bg-1);
+      color:var(--text);
+      display:flex;align-items:center;justify-content:center;padding:28px;
+    }
+
+    /* Contenedor principal */
+    .wrap{
+      width:100%;
+      max-width:980px;
+      display:grid;
+      grid-template-columns: 420px 1fr;
+      gap:28px;
+      align-items:center;
+    }
+
+    /* Tarjeta de login */
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:28px;
+      box-shadow: 0 10px 30px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+      position:relative;
+      overflow:visible;
+    }
+
+    .brand{
+      display:flex;gap:12px;align-items:center;margin-bottom:14px
+    }
+    .logo{
+      width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;color:white;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      box-shadow: 0 6px 18px rgba(124,58,237,0.18);
+      font-size:18px
+    }
+    .brand h1{margin:0;font-size:18px}
+    .brand p{margin:0;color:var(--muted);font-size:13px}
+
+    /* Formulario */
+    form{margin-top:6px}
+    .field{display:flex;flex-direction:column;margin-bottom:12px}
+    label{font-size:13px;color:var(--muted);margin-bottom:8px}
+
+    .input{
+      display:flex;align-items:center;gap:8px;padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.0));
+      border:1px solid rgba(255,255,255,0.04);transition:box-shadow 180ms ease, border-color 180ms ease, transform 120ms ease;
+    }
+    .input:focus-within{box-shadow:0 8px 30px rgba(7,16,30,0.5);border-color:rgba(124,58,237,0.6);transform:translateY(-2px)}
+
+    .input input{
+      background:transparent;border:0;outline:none;color:var(--text);font-size:15px;width:100%
+    }
+
+    .actions{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+    .remember{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:14px}
+
+    .btn-primary{
+      margin-top:12px;padding:12px;border-radius:10px;border:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:white;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:transform 150ms ease,box-shadow 150ms ease;
+      box-shadow: 0 8px 24px rgba(99,102,241,0.12);
+    }
+    .btn-primary:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(99,102,241,0.16)}
+
+    .btn-ghost{
+      background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text);padding:10px;border-radius:10px;cursor:pointer
+    }
+
+    .helper{font-size:13px;color:var(--muted);margin-top:6px}
+
+    /* Social buttons */
+    .social{display:flex;gap:8px;margin-top:12px}
+    .social button{flex:1;padding:10px;border-radius:10px;border:0;cursor:pointer;font-weight:600}
+    .s-google{background:linear-gradient(90deg,#fff,#f2f2f2);color:#222}
+    .s-apple{background:linear-gradient(90deg,#000,#333);color:#fff}
+    .s-metadata{font-size:12px;color:var(--muted);text-align:center;margin-top:10px}
+
+    /* Lado derecho: ilustración / info */
+    .panel-right{
+      padding:24px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));box-shadow:0 8px 30px rgba(2,6,23,0.5);
+      min-height:360px;display:flex;flex-direction:column;justify-content:center;gap:12px
+    }
+    .promo-title{font-size:20px;margin:0}
+    .promo-desc{color:var(--muted);font-size:14px}
+
+    .features{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
+    .feature{background:var(--glass-2);padding:10px;border-radius:10px;font-size:13px}
+
+    /* Mensajes */
+    .message{margin-top:12px;font-size:13px}
+    .message.success{color:var(--success)}
+    .message.error{color:var(--danger)}
+
+    /* Pequeñas animaciones decorativas */
+    .sparkles{position:absolute;right:-40px;top:-30px;width:120px;height:120px;background:radial-gradient(circle at 30% 30%, rgba(124,58,237,0.25), transparent 25%), radial-gradient(circle at 70% 70%, rgba(6,182,212,0.18), transparent 25%);filter:blur(14px);transform:rotate(12deg);}
+
+    /* Responsivo */
+    @media (max-width:920px){
+      .wrap{grid-template-columns:1fr;}
+      .sparkles{display:none}
+    }
+
+    /* Focus visible para accesibilidad */
+    input:focus{outline:none}
+    .visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+
+    /* Pequeño footer legal dentro del card */
+    .tiny{font-size:12px;color:var(--muted);margin-top:8px}
+
+  </style>
 </head>
 <body>
-<div class="login-container">
-  <h2>Iniciar Sesión</h2>
-  <div class="form-group">
-    <label for="username">Usuario</label>
-    <input type="text" id="username" placeholder="Ingresa tu usuario" />
+
+  <div class="wrap" role="main">
+
+    <!-- CARD: LOGIN FORM -->
+    <section class="card" aria-labelledby="loginTitle">
+      <div class="sparkles" aria-hidden="true"></div>
+
+      <div class="brand">
+        <div class="logo">LP</div>
+        <div>
+          <h1 id="loginTitle">Login Pro</h1>
+          <p>Accede a tu cuenta de forma segura y rápida</p>
+        </div>
+      </div>
+
+      <!-- Formulario -->
+      <form id="loginForm" novalidate>
+
+        <div class="field">
+          <label for="email">Correo o usuario</label>
+          <div class="input">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden style="opacity:0.8"><path d="M3 8l8.5 6L20 8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path><rect x="3" y="3" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.2"></rect></svg>
+            <input id="email" name="email" type="text" inputmode="email" autocomplete="username" placeholder="ejemplo@correo.com" aria-describedby="emailHelp" required />
+          </div>
+          <div id="emailHelp" class="helper">Usa tu correo o nombre de usuario</div>
+        </div>
+
+        <div class="field">
+          <label for="password">Contraseña</label>
+          <div class="input">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden style="opacity:0.8"><path d="M5 11v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path><rect x="7" y="11" width="10" height="7" rx="2" stroke="currentColor" stroke-width="1.2"></rect></svg>
+            <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Tu contraseña" required aria-describedby="pwHelp" />
+            <button type="button" aria-label="Mostrar contraseña" id="togglePw" class="btn-ghost" style="margin-left:8px">Mostrar</button>
+          </div>
+          <div id="pwHelp" class="helper">Mínimo 8 caracteres. Usa letras y números.</div>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+          <label class="remember"><input id="remember" type="checkbox" /> Recordarme</label>
+          <a href="#" id="forgotLink" style="color:var(--muted);text-decoration:none;font-size:13px">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <button class="btn-primary" id="submitBtn" type="submit">
+          Entrar
+          <svg id="spinner" style="display:none" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <path d="M21 12a9 9 0 1 1-6.219-8.509" stroke="rgba(255,255,255,0.95)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </button>
+
+        <div id="formMessage" class="message" role="status" aria-live="polite"></div>
+
+      </form>
+
+      <div class="social" aria-hidden="false">
+        <button class="s-google" id="btnGoogle">Iniciar con Google</button>
+        <button class="s-apple" id="btnApple">Iniciar con Apple</button>
+      </div>
+
+      <div class="tiny">Al continuar aceptas los <a href="#" style="color:var(--muted)">Términos y Condiciones</a> y la <a href="#" style="color:var(--muted)">Política de Privacidad</a>.</div>
+
+    </section>
+
+    <!-- PANEL: Info + ilustración simple -->
+    <aside class="panel-right" aria-hidden="false">
+      <h3 class="promo-title">Bienvenido de vuelta 👋</h3>
+      <p class="promo-desc">Diseño profesional con atención a la usabilidad y accesibilidad. Autenticación simulada para demostración — sin datos reales enviados.</p>
+
+      <div class="features" aria-hidden="true">
+        <div class="feature">✔️ Animaciones suaves</div>
+        <div class="feature">🔒 Seguridad (simulada)</div>
+        <div class="feature">⚡ Respuesta rápida</div>
+        <div class="feature">♿ Accesible</div>
+      </div>
+
+      <div style="margin-top:16px;color:var(--muted);font-size:13px">Consejo: prueba con <strong>admin@demo.test</strong> / <strong>Password123</strong></div>
+
+    </aside>
+
   </div>
-  <div class="form-group">
-    <label for="password">Contraseña</label>
-    <input type="password" id="password" placeholder="Ingresa tu contraseña" />
-  </div>
-  <button onclick="login()">Entrar</button>
-  <div class="message" id="message"></div>
-</div>
-<script>
-function login() {
-  const user = document.getElementById('username').value.trim();
-  const pass = document.getElementById('password').value.trim();
-  const message = document.getElementById('message');
-  
-  if(user === '' || pass === '') {
-    message.textContent = 'Por favor completa todos los campos';
-    return;
-  }
-  
-  if(user === 'admin' && pass === '1234') {
-    message.style.color = 'green';
-    message.textContent = '¡Bienvenido, ' + user + '!';
-    setTimeout(() => {
-      window.location.href = 'dashboard.html';
-    }, 1500);
-  } else {
-    message.style.color = 'red';
-    message.textContent = 'Usuario o contraseña incorrectos';
-  }
-}
-</script>
+
+  <script>
+    /* ----------------------------------------------------
+       Lógica JS: validaciones, UX, simulación de autenticación
+       y persistencia local (recordarme)
+       ---------------------------------------------------- */
+
+    (function(){
+      // Elementos
+      const form = document.getElementById('loginForm');
+      const email = document.getElementById('email');
+      const password = document.getElementById('password');
+      const togglePw = document.getElementById('togglePw');
+      const submitBtn = document.getElementById('submitBtn');
+      const formMessage = document.getElementById('formMessage');
+      const spinner = document.getElementById('spinner');
+      const remember = document.getElementById('remember');
+
+      // Simulamos un "servidor" con un usuario válido (solo demo)
+      const demoUser = {
+        email: 'admin@demo.test',
+        username: 'admin',
+        password: 'Password123' // NUNCA almacenar contraseñas así en producción
+      };
+
+      // Acciones de la UI
+      togglePw.addEventListener('click', ()=>{
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        togglePw.textContent = type === 'password' ? 'Mostrar' : 'Ocultar';
+        // Mantener el foco en el input
+        password.focus();
+      });
+
+      // Mostrar mensaje con estilo
+      function showMessage(text, type='error'){
+        formMessage.textContent = text;
+        formMessage.classList.remove('success','error');
+        formMessage.classList.add(type === 'success' ? 'success' : 'error');
+      }
+
+      function clearMessage(){ formMessage.textContent = ''; formMessage.classList.remove('success','error'); }
+
+      // Pequeña validación
+      function validate(){
+        const e = email.value.trim();
+        const p = password.value;
+        if(!e || !p) { showMessage('Completa todos los campos.'); return false; }
+        if(p.length < 8) { showMessage('La contraseña debe tener al menos 8 caracteres.'); return false; }
+        // Validar formato de email razonablemente
+        const emailLike = /@/.test(e);
+        if(!emailLike && e.length < 3){ showMessage('Ingresa un usuario o correo válido.'); return false; }
+        return true;
+      }
+
+      // Animación simple para el botón
+      function setLoading(on){
+        if(on){
+          spinner.style.display = 'inline-block';
+          submitBtn.disabled = true;
+          submitBtn.style.opacity = '0.85';
+        } else {
+          spinner.style.display = 'none';
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = '';
+        }
+      }
+
+      // Simulación de petición al servidor con promesa y delay
+      function fakeAuth(payload){
+        return new Promise((resolve,reject)=>{
+          // Simulamos latencia de red
+          const delay = Math.random()*800 + 600; // 600-1400ms
+          setTimeout(()=>{
+            // reglas de autenticación demo:
+            const valid = (payload.email.toLowerCase() === demoUser.email || payload.email === demoUser.username) && payload.password === demoUser.password;
+            if(valid) resolve({ok:true, user:{email:demoUser.email, name:'Administrador Demo'}});
+            else reject({ok:false, error:'Credenciales incorrectas'});
+          }, delay);
+        });
+      }
+
+      // Persistencia simple (solo usuario, no contraseña)
+      function saveRemember(emailVal){
+        try{ localStorage.setItem('demo_login_email', emailVal); }
+        catch(e){ /* ignore */ }
+      }
+      function loadRemember(){
+        try{ return localStorage.getItem('demo_login_email') || ''; }
+        catch(e){ return ''; }
+      }
+
+      // Cargar valor recordado
+      const saved = loadRemember();
+      if(saved){ email.value = saved; remember.checked = true; }
+
+      // Manejo submit
+      form.addEventListener('submit', function(e){
+        e.preventDefault(); clearMessage();
+        if(!validate()) return;
+
+        setLoading(true);
+
+        const payload = { email: email.value.trim(), password: password.value };
+
+        fakeAuth(payload).then(res=>{
+          setLoading(false);
+          showMessage('Autenticación exitosa. Redirigiendo...', 'success');
+
+          // Guardar "recordar"
+          if(remember.checked){ saveRemember(payload.email); } else { saveRemember(''); }
+
+          // Simular redirección segura (aquí no se realiza ninguna comunicación real)
+          setTimeout(()=>{
+            // Para propósitos de demo, abrimos un panel simple en la misma ventana
+            showDashboard(res.user);
+          }, 700);
+
+        }).catch(err=>{
+          setLoading(false);
+          showMessage(err && err.error ? err.error : 'Error de autenticación.');
+          // pequeña vibración/efecto para enfatizar error
+          shake(form);
+        });
+      });
+
+      // Efecto shake en caso de error
+      function shake(el){
+        el.style.transition = 'transform 80ms ease';
+        el.style.transform = 'translateX(-8px)';
+        setTimeout(()=> el.style.transform = 'translateX(8px)', 80);
+        setTimeout(()=> el.style.transform = '', 160);
+      }
+
+      // Manejo enlaces de social (demostración)
+      document.getElementById('btnGoogle').addEventListener('click', ()=>{
+        showMessage('Inicio con Google (simulado) — en demo no se realiza autenticación externa.');
+      });
+      document.getElementById('btnApple').addEventListener('click', ()=>{
+        showMessage('Inicio con Apple (simulado) — en demo no se realiza autenticación externa.');
+      });
+
+      // Mostrar un "dashboard" sencillo dentro de la misma página (demo)
+      function showDashboard(user){
+        // Crear un overlay simple
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed'; overlay.style.inset = 0; overlay.style.background = 'linear-gradient(180deg, rgba(2,6,23,0.9), rgba(2,6,23,0.95))'; overlay.style.display='flex'; overlay.style.alignItems='center'; overlay.style.justifyContent='center'; overlay.style.zIndex='9999';
+
+        const box = document.createElement('div');
+        box.style.background = '#0b1220'; box.style.padding = '28px'; box.style.borderRadius = '12px'; box.style.width = 'min(860px,90%)'; box.style.color = 'var(--text)'; box.style.boxShadow='0 20px 60px rgba(2,6,23,0.8)';
+
+        box.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+            <div>
+              <h2 style="margin:0">Bienvenido, ${escapeHtml(user.name || user.email)}</h2>
+              <div style="color:var(--muted);margin-top:6px">Has iniciado sesión en modo demostración</div>
+            </div>
+            <div>
+              <button id="closeDemo" class="btn-ghost">Cerrar sesión</button>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px">
+            <div style="background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:12px;border-radius:10px">📈 <div style="font-weight:700;font-size:20px">1,234</div><div style="color:var(--muted);font-size:12px">Visitas</div></div>
+            <div style="background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:12px;border-radius:10px">🧾 <div style="font-weight:700;font-size:20px">23</div><div style="color:var(--muted);font-size:12px">Nuevas órdenes</div></div>
+            <div style="background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:12px;border-radius:10px">💬 <div style="font-weight:700;font-size:20px">8</div><div style="color:var(--muted);font-size:12px">Mensajes</div></div>
+          </div>
+          <div style="margin-top:16px;color:var(--muted);font-size:13px">Esto es una vista de demostración para mostrar cómo se vería la aplicación después de iniciar sesión. Ningún dato real fue intercambiado con un servidor.</div>
+        `;
+
+        overlay.appendChild(box);
+        document.body.appendChild(overlay);
+
+        document.getElementById('closeDemo').addEventListener('click', ()=>{
+          // limpiar datos de "recordarme" si se desea
+          document.body.removeChild(overlay);
+          clearMessage();
+          password.value = '';
+        });
+      }
+
+      // Escape para inyección mínima en demo
+      function escapeHtml(s){ return String(s).replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"})[m] }); }
+
+      // Mejora: permitir enviar con Enter desde campos
+      [email,password].forEach(input=>{
+        input.addEventListener('keydown', function(e){ if(e.key === 'Enter') submitBtn.click(); });
+      });
+
+      // small accessibility: focus order
+      email.setAttribute('aria-label','Correo o usuario');
+      password.setAttribute('aria-label','Contraseña');
+
+    })();
+
+  </script>
+
 </body>
 </html>
+
